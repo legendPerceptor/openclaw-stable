@@ -2,10 +2,14 @@ FROM 1panel/openclaw
 
 USER root
 
-# 只安装 supervisord，docker CLI 从宿主机映射
+# 安装 supervisord
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
+
+# 创建 docker 组（GID 121 匹配宿主机）并添加 node 用户
+RUN groupadd -g 121 docker && \
+    usermod -aG docker node
 
 RUN mkdir -p /var/log/supervisor
 
