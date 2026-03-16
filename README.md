@@ -1,6 +1,6 @@
 # OpenClaw Stable 镜像
 
-解决配置更新时容器退出的问题。
+解决配置更新时容器退出的问题，并自动修复权限问题。
 
 ## 前置依赖：Xray 代理容器
 
@@ -96,6 +96,7 @@ docker run -d \
 - gateway 重启时 supervisord 自动拉起，容器不退出
 - 挂载 `/var/run/docker.sock` 让 OpenClaw 可以管理 Docker
 - 日志存储在 `/var/log/supervisor/`
+- **自动修复权限**：启动时将 root 拥有的文件改为 node 用户
 
 ## 查看日志
 
