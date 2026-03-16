@@ -84,6 +84,7 @@ docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /usr/bin/docker:/usr/bin/docker \
   -v /var/log/openclaw:/var/log/supervisor \
+  -v /home/briannas/.ssh:/home/node/.ssh:ro \
   -e HTTP_PROXY=http://xray:1087 \
   -e HTTPS_PROXY=http://xray:1087 \
   -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn \
