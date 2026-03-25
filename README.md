@@ -2,6 +2,18 @@
 
 解决配置更新时容器退出的问题，并自动修复权限问题。
 
+## 一键配置
+
+复制.env.example为.env文件，修改所需的环境变量。默认的Dockerfile中会安装一些额外的包以便openclaw可以在容器中做比较复杂的任务，比如视频生成、语音合成等等。我已经将pip和apt的源都换为国内源，安装所需时间应该在几分钟之内。如果不希望安装这些包，可以把docker-compose.yml中的Dockerfile改成Dockerfile.basic，也可以让你开始快速使用OpenClaw。
+
+创建xray文件夹，并在其中配置config.json文件，具体如何配置见后文。
+
+配置完成后可以用下面的命令一键启动openclaw。
+
+```bash
+docker compose up -d
+```
+
 ## 前置依赖：Xray 代理容器
 
 OpenClaw 需要通过代理访问外网，先启动 xray (其中GLM模型和飞书采用no_proxy直连的方式)：

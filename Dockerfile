@@ -42,6 +42,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
 # 安装 Python 包（用于视频脚本）
 RUN pip3 install --no-cache-dir --break-system-packages \
     # Markdown 处理
