@@ -1,0 +1,32 @@
+# Environment files (sensitive)
+.env
+.env.local
+.env.*.local
+
+# Xray config (contains proxy credentials)
+xray/
+xray/config.json
+
+# Docker volumes
+*.vol
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node modules (if any)
+node_modules/
+
+# Build artifacts
+dist/
+build/
