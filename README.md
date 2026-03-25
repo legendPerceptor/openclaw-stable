@@ -87,7 +87,7 @@ docker run -d \
   -v /home/briannas/.ssh:/home/node/.ssh \
   -e HTTP_PROXY=http://xray:1087 \
   -e HTTPS_PROXY=http://xray:1087 \
-  -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn \
+  -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn, api.search.brave.com, api.minimaxi.com \
   openclaw-stable
 ```
 
