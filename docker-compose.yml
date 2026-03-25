@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  # ==================== OpenClaw 主容器 ====================
+  akali-openclaw:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: akali-openclaw
+    ports:
+      - "${OPENCLAW_PORT:-3000}:3000"
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY:-http://akali-xray:1087}
+      - HTTPS_PROXY=${HTTPS_PROXY:-http://akali-xray:1087}
+      - NO_PROXY=${NO_PROXY:-localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn,api.minimaxi.com,api.search.brave.com}
+    volumes:
+      - ${OPENCLAW_WORKSPACE}:/home/node/.openclaw
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /var/log/openclaw:/var/log/supervisor
+      - ${SSH_KEY_PATH:-/home/briannas/.ssh}:/home/node/.ssh
+    networks:
+      - akali-net
+    restart: unless-stopped
+
+  # ==================== Xray 代理容器 ====================
+  akali-xray:
+    image: teddysun/xray
+    container_name: akali-xray
+    ports:
+      - "${XRAY_PORT:-8117}:1087"
+    volumes:
+      - ${XRAY_CONFIG_PATH}:/etc/xray/config.json:ro
+    networks:
+      - akali-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "xray", "version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Agent Memory Qdrant 向量数据库 ====================
+  akali-agent-memory-qdrant:
+    image: qdrant/qdrant:latest
+    container_name: akali-agent-memory-qdrant
+    ports:
+      - "${QDRANT_PORT:-6336}:6333"
+      - "${QDRANT_GRPC_PORT:-6337}:6334"
+    environment:
+      - QDRANT__STORAGE__STORAGE_PATH=${QDRANT_STORAGE_PATH:-/qdrant/storage}
+    volumes:
+      - ${QDRANT_STORAGE_PATH:-/data/qdrant}:/qdrant/storage
+    networks:
+      - akali-net
+    restart: unless-stopped
+
+networks:
+  akali-net:
+    driver: bridge
