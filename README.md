@@ -99,6 +99,63 @@ docker run -d \
 - 日志存储在 `/var/log/supervisor/`
 - **自动修复权限**：启动时将 root 拥有的文件改为 node 用户
 
+---
+
+## akali-video 分支 🎬
+
+为 **The Akali YouTube Project** 扩展的视频制作专用镜像。
+
+### 额外安装的软件
+
+| 软件 | 用途 |
+|------|------|
+| **ffmpeg** | 视频处理、格式转换 |
+| **Python3 + pip** | 脚本执行、Markdown 处理 |
+| **Chromium** | Puppeteer 截图（备选） |
+| **ImageMagick** | 图片转换处理 |
+| **fonts-wqy-zenhei** | 中文字体支持 |
+| **jq** | JSON 处理 |
+
+### Python 包
+
+- `markdown` - Markdown 解析
+- `pyyaml` - YAML 处理
+- `Pillow` - 图片处理
+- `requests` - HTTP 请求
+
+### 使用 akali-video 镜像
+
+```bash
+# 切换到 akali-video 分支
+git checkout akali-video
+
+# 构建镜像
+docker build -t openclaw-stable:akali-video .
+
+# 启动容器（同上，只需改镜像名）
+docker run -d \
+  --name openclaw \
+  --restart always \
+  --network proxy-net \
+  -v /volume1/shared-shanghai/openclaw-workhome/1panel-claw:/home/node/.openclaw \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v /usr/bin/docker:/usr/bin/docker \
+  -v /var/log/openclaw:/var/log/supervisor \
+  -v /home/briannas/.ssh:/home/node/.ssh \
+  -e HTTP_PROXY=http://xray:1087 \
+  -e HTTPS_PROXY=http://xray:1087 \
+  -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn \
+  openclaw-stable:akali-video
+```
+
+### 验证安装
+
+```bash
+docker exec openclaw ffmpeg -version
+docker exec openclaw python3 --version
+docker exec openclaw pip3 list
+```
+
 ## 查看日志
 
 ```bash
