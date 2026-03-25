@@ -65,15 +65,14 @@ docker run -d \
 
 ```bash
 cd /path/to/openclaw-stable
-docker build -t openclaw-stable .
+docker build -t openclaw-stable . -f Dockerfile.basic
 ```
 
 ## 启动 OpenClaw 容器
 
 ```bash
 # 停止并删除旧容器
-docker stop 1panel_openclaw-1 2>/dev/null
-docker rm 1panel_openclaw-1 2>/dev/null
+docker container stop openclaw && docker container rm openclaw
 
 # 启动新容器（确保 xray 已先启动）
 docker run -d \
@@ -107,14 +106,14 @@ docker run -d \
 
 ### 额外安装的软件
 
-| 软件 | 用途 |
-|------|------|
-| **ffmpeg** | 视频处理、格式转换 |
-| **Python3 + pip** | 脚本执行、Markdown 处理 |
-| **Chromium** | Puppeteer 截图（备选） |
-| **ImageMagick** | 图片转换处理 |
-| **fonts-wqy-zenhei** | 中文字体支持 |
-| **jq** | JSON 处理 |
+| 软件                 | 用途                    |
+| -------------------- | ----------------------- |
+| **ffmpeg**           | 视频处理、格式转换      |
+| **Python3 + pip**    | 脚本执行、Markdown 处理 |
+| **Chromium**         | Puppeteer 截图（备选）  |
+| **ImageMagick**      | 图片转换处理            |
+| **fonts-wqy-zenhei** | 中文字体支持            |
+| **jq**               | JSON 处理               |
 
 ### Python 包
 
@@ -123,13 +122,11 @@ docker run -d \
 - `Pillow` - 图片处理
 - `requests` - HTTP 请求
 
-### 使用 akali-video 镜像
+### 使用 akali-video 镜像 (当前为默认Dockerfile)
 
 ```bash
-# 切换到 akali-video 分支
-git checkout akali-video
-
 # 构建镜像
+docker container stop openclaw && docker container rm openclaw
 docker build -t openclaw-stable:akali-video .
 
 # 启动容器（同上，只需改镜像名）
@@ -144,7 +141,7 @@ docker run -d \
   -v /home/briannas/.ssh:/home/node/.ssh \
   -e HTTP_PROXY=http://xray:1087 \
   -e HTTPS_PROXY=http://xray:1087 \
-  -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn \
+  -e NO_PROXY=localhost,127.0.0.1,*.feishu.cn,*.larksuite.com,*.zhipuai.cn,bigmodel.cn,open.bigmodel.cn,api.search.brave.com,api.minimaxi.com \
   openclaw-stable:akali-video
 ```
 
