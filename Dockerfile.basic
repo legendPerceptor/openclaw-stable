@@ -18,6 +18,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian/gpg \
+      | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+    https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/debian \
+    $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
+    > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+      docker-ce-cli \
+      docker-compose-plugin && \
+    rm -rf /var/lib/apt/lists/*
+
 # 创建 docker 组（GID 121 匹配宿主机）并添加 node 用户
 RUN groupadd -g 121 docker && \
     usermod -aG docker node
